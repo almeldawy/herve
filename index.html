@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hervé-Tron 3000 & Régine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00de;
+            --neon-cyan: #00ffff;
+            --neon-green: #39ff14;
+            --bg-color: #050014;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--neon-cyan);
+            font-family: 'VT323', monospace;
+            overflow-x: hidden;
+            font-size: 1.2rem;
+            cursor: crosshair;
+        }
+
+        /* Effet d'écran cathodique (CRT) */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        @keyframes spin3d {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .blink { animation: blink 1s infinite; }
+        .glitch:hover { animation: glitch 0.2s infinite; color: var(--neon-pink); }
+        .spin { display: inline-block; animation: spin3d 3s infinite linear; }
+
+        h1, h2, h3 {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .title-pink {
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink), 0 0 40px var(--neon-pink);
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+
+        .title-cyan {
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+            font-size: 1.2rem;
+        }
+
+        .marquee-container {
+            background-color: var(--neon-pink);
+            color: black;
+            font-weight: bold;
+            padding: 5px 0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .container { grid-template-columns: 1fr 1fr; }
+        }
+
+        .panel {
+            border: 4px solid;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: inset 0 0 20px;
+            position: relative;
+        }
+
+        .panel-herve {
+            border-color: var(--neon-pink);
+            box-shadow: inset 0 0 20px var(--neon-pink), 0 0 20px var(--neon-pink);
+            color: #ffb3f6;
+        }
+
+        .panel-regine {
+            border-color: var(--neon-green);
+            box-shadow: inset 0 0 20px var(--neon-green), 0 0 20px var(--neon-green);
+            color: #b3ffb3;
+        }
+
+        button {
+            background: transparent;
+            border: 2px solid;
+            color: inherit;
+            font-family: 'Press Start 2P', cursive;
+            padding: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover { background: inherit; color: black; }
+
+        .btn-herve { border-color: var(--neon-pink); }
+        .btn-herve:hover { background: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); }
+
+        .btn-regine { border-color: var(--neon-green); }
+        .btn-regine:hover { background: var(--neon-green); box-shadow: 0 0 20px var(--neon-green); }
+
+        .meter-container {
+            width: 100%;
+            height: 30px;
+            border: 2px solid var(--neon-cyan);
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            width: 50%;
+            transition: width 0.2s;
+        }
+
+        ul { list-style-type: square; }
+        li { margin-bottom: 10px; }
+
+        /* Cyber-images placeholders */
+        .cyber-img {
+            width: 100%;
+            height: 200px;
+            background-color: #222;
+            border: 2px dashed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .cyber-img.herve-img { border-color: var(--neon-pink); color: var(--neon-pink); }
+        .cyber-img.regine-img { border-color: var(--neon-green); color: var(--neon-green); }
+
+        #console-log {
+            background: #001100;
+            border: 2px solid var(--neon-green);
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            color: var(--neon-green);
+            margin-top: 20px;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="marquee-container">
+        <marquee scrollamount="15">
+            ⚠️ ATTENTION : CE SITE ÉMET DES PHÉROMONES DIGITALES DE CLASSE 4 ⚠️ --- CONNEXION SÉCURISÉE AU SLIP EN KEVLAR DE HERVÉ --- ⚠️ RÉGINE DEMANDE DE RANGER LES DISQUETTES MOLLES ⚠️ --- CHARGEMENT DU SEX-APPEAL QUANTIQUE EN COURS... 99% --- ⚠️
+        </marquee>
+    </div>
+
+    <header style="text-align: center; padding: 20px;">
+        <h1 class="title-pink"><span class="spin">🍆</span> HERVÉ-TRON 3000 <span class="spin">🍆</span></h1>
+        <h2 class="title-cyan">LE CYBER-NYMPHOMANE DU FUTUR (ET SA FEMME RÉGINE)</h2>
+        <p class="blink">>>> CONNEXION MODEM 56K ÉTABLIE... RÉSEAU ÉROTIQUE LOCAL ACTIVÉ <<<</p>
+    </header>
+
+    <div class="container">
+
+        <div class="panel panel-herve">
+            <h3>ZONE DE SÉDUCTION TACTIQUE</h3>
+            <div class="cyber-img herve-img">
+                [IMAGE NON CHARGÉE: HERVÉ EN SLIP<br>ARGENTÉ SUR UN MINITEL]
+            </div>
+            <p>Bienvenue dans ma matrice charnelle, voyageur de l'hyper-espace. Moi, c'est Hervé. J'ai uploadé ma libido dans le cloud cosmique en 1997. Mon corps est un temple... bourré de câbles péritel.</p>
+            
+            <p style="text-decoration: underline;">Mes Techniques de Drague Cybernétique :</p>
+            <ul>
+                <li class="glitch">Glisser une clé USB pleine de poésie dans le lecteur disquette de l'être aimé.</li>
+                <li class="glitch">Porter du déodorant au plutonium pour briller en boîte de nuit (littéralement).</li>
+                <li class="glitch">Faire l'amour en apesanteur (en sautant très fort sur le lit de Régine).</li>
+            </ul>
+
+            <div style="border: 1px solid var(--neon-pink); padding: 10px; margin-top: 20px;">
+                <p><strong>NIVEAU DE TENSION DU CALECON THERMIQUE :</strong></p>
+                <div class="meter-container">
+                    <div class="meter-fill" id="herve-libido-bar" style="width: 85%;"></div>
+                </div>
+                <button class="btn-herve" onclick="stimulerHerve()">> STIMULER LE CYBER-PÉRINÉE <</button>
+            </div>
+        </div>
+
+        <div class="panel panel-regine">
+            <h3 style="color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green);">LE BUNKER DE RÉGINE</h3>
+            <div class="cyber-img regine-img">
+                [IMAGE NON CHARGÉE: RÉGINE TRICOTANT<br>DE LA FIBRE OPTIQUE]
+            </div>
+            <p>Bonjour. C'est Régine. Je suis épuisée. Hervé a encore essayé de faire l'amour au micro-ondes parce qu'il disait que "ses ondes étaient sensuelles". J'ai dû le mettre en veille prolongée avec un coup de poêle en téflon.</p>
+            
+            <p style="text-decoration: underline;">Agenda de la Semaine :</p>
+            <ul>
+                <li><strong>Lundi :</strong> Nettoyer l'ectoplasme amoureux sur l'écran cathodique.</li>
+                <li><strong>Mercredi :</strong> Préparer un Bœuf Bourguignon à l'Uranium 235 (pour calmer les ardeurs du cyborg).</li>
+                <li><strong>Vendredi :</strong> Changer le mot de passe du grille-pain pour protéger son intégrité physique.</li>
+            </ul>
+
+            <div style="border: 1px solid var(--neon-green); padding: 10px; margin-top: 20px;">
+                <p><strong>NIVEAU DE PATIENCE DE RÉGINE :</strong></p>
+                <div class="meter-container" style="border-color: var(--neon-green);">
+                    <div class="meter-fill" id="regine-patience-bar" style="width: 15%; background: var(--neon-green);"></div>
+                </div>
+                <button class="btn-regine" onclick="calmerHerve()">> DONNER UN COUP DE PIED À LA TOUR PC <</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container" style="grid-template-columns: 1fr;">
+        <div class="panel" style="border-color: var(--neon-cyan);">
+            <h3 class="title-cyan">TERMINAL DES ÉVÉNEMENTS DOMESTIQUES</h3>
+            <div id="console-log">
+                > Initialisation du système relationnel... OK.<br>
+                > Libido de Hervé chargée à 85%... ATTENTION.<br>
+                > Régine a armé le rouleau à pâtisserie bionique... EN ATTENTE.<br>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; font-size: 0.8rem;">
+            <p>Compteur de visites : <span id="visitor-counter" class="blink">000000001</span> (Depuis l'an 3000)</p>
+            <p>© 1998 - Hervé Corp. - Optimisé pour Netscape Navigator et Minitel Rose.</p>
+        </div>
+    </div>
+
+    <script>
+        let libidoLevel = 85;
+        let patienceLevel = 15;
+        let visitors = 42069;
+        const consoleLog = document.getElementById('console-log');
+        const libidoBar = document.getElementById('herve-libido-bar');
+        const patienceBar = document.getElementById('regine-patience-bar');
+        const visitorCounter = document.getElementById('visitor-counter');
+
+        // Animation du faux compteur de visites
+        setInterval(() => {
+            visitors += Math.floor(Math.random() * 5);
+            visitorCounter.innerText = visitors.toString().padStart(9, '0');
+        }, 3000);
+
+        function logToConsole(message, type = 'normal') {
+            const time = new Date().toLocaleTimeString();
+            let prefix = "> ";
+            let color = "var(--neon-green)";
+            
+            if(type === 'herve') { color = "var(--neon-pink)"; prefix = "[HERVÉ] "; }
+            if(type === 'regine') { color = "yellow"; prefix = "[RÉGINE] "; }
+            if(type === 'alert') { color = "red"; prefix = "!!! ALERTE !!! "; }
+
+            const logLine = `<span style="color: ${color}">${time} ${prefix} ${message}</span><br>`;
+            consoleLog.innerHTML += logLine;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        function stimulerHerve() {
+            libidoLevel += 15;
+            patienceLevel -= 5;
+            
+            if (libidoLevel > 100) libidoLevel = 100;
+            if (patienceLevel < 0) patienceLevel = 0;
+
+            updateBars();
+
+            const herveActions = [
+                "Hervé tente de séduire la box internet en lui chuchotant des IP doux.",
+                "Surchauffe du slip en Mithril ! Activation des ventilateurs pelviens.",
+                "Hervé envoie un ping amoureux à une intelligence artificielle soviétique.",
+                "Érection quantique détectée : la courbure de l'espace-temps est modifiée dans le salon."
+            ];
+
+            const randomAction = herveActions[Math.floor(Math.random() * herveActions.length)];
+            logToConsole(randomAction, 'herve');
+
+            if (libidoLevel === 100) {
+                logToConsole("DANGER : FUSION DU COEUR DU RÉACTEUR ÉROTIQUE D'HERVÉ IMMINENTE !", 'alert');
+                document.body.style.animation = "glitch 0.1s 5";
+                setTimeout(() => { document.body.style.animation = ""; }, 500);
+            }
+        }
+
+        function calmerHerve() {
+            patienceLevel += 20;
+            libidoLevel -= 30;
+
+            if (patienceLevel > 100) patienceLevel = 100;
+            if (libidoLevel < 0) libidoLevel = 0;
+
+            updateBars();
+
+            const regineActions = [
+                "Régine jette un seau d'azote liquide sur l'entrejambe d'Hervé. Choc thermique réussi.",
+                "Régine débranche le routeur. Hervé pleure en binaire.",
+                "Régine menace d'installer un antivirus de chasteté. Calme temporaire.",
+                "Coup de poêle en téflon sur la carte mère d'Hervé. Reboot du système en cours..."
+            ];
+
+            const randomAction = regineActions[Math.floor(Math.random() * regineActions.length)];
+            logToConsole(randomAction, 'regine');
+
+            if (libidoLevel < 20) {
+                logToConsole("Système reproducteur de Hervé en mode 'Économie d'énergie'.", 'normal');
+            }
+        }
+
+        function updateBars() {
+            libidoBar.style.width = libidoLevel + '%';
+            patienceBar.style.width = patienceLevel + '%';
+            
+            // Changement de couleur de la barre d'Hervé selon la chaleur
+            if(libidoLevel > 80) libidoBar.style.background = "red";
+            else libidoBar.style.background = "linear-gradient(90deg, var(--neon-cyan), var(--neon-pink))";
+            
+            // Changement de couleur patience Régine
+            if(patienceLevel < 20) patienceBar.style.background = "red";
+            else patienceBar.style.background = "var(--neon-green)";
+        }
+    </script>
+</body>
+</html>
